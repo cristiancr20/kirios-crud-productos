@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+Categorias
+{% endblock %}
+
+{% block contenido %}
+<div class="container col-3 mt-1">
+    <h1 class="text-center">Editar categoria</h1>
+    <form class="mt-5" method="POST" action="{% url 'crud:editarCategoria' categoria.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{categoria.nombre}}">
+            <div id="nombre" class="form-text">Modifique la categoria</div>
+        </div>
+        <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <input type="text" class="form-control" id="estado" name="estado" value="{{categoria.estado}}">
+            <div id="estado" class="form-text">Modifique el estado</div>
+        </div>
+
+        <div class="d-flex justify-content-evenly mt-2">
+            <a href="{% url 'crud:verCategoria' %}">
+                <button type="button" class="btn btn-secondary">Cancelar</button>
+            </a>
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

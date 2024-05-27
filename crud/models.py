@@ -3,14 +3,19 @@ from django.db import models
 
 class Marca(models.Model):
     nombre = models.CharField(max_length=100)
-    estado = models.CharField(max_length=50, default='True')
+    estado = models.CharField(max_length=1, default='V')
 
     def __str__(self):
         return self.nombre
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100)
+    estado = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        self.estado = True
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return self.nombre
 

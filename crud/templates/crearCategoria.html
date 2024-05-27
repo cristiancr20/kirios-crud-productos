@@ -1,29 +1,24 @@
 {% extends 'index.html' %}
+{% load bootstrap5 %}
 
 {% block titulo %}
-    Categorias
+Categorias
 {% endblock %}
 
 {% block contenido %}
-    <br>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="text-center">Crear Categorias</h1>
-                <br>
-                <form method="POST" class="needs-validation" novalidate>
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_nombre" class="form-label">Nombre</label>
-                        {{ form.nombre }}
-                        <div class="invalid-feedback">
-                            El nombre es obligatorio.
-                        </div>
-                    </div>
-                   
-                    <button type="submit" class="btn btn-primary">Enviar</button>
-                </form>
-            </div>
+<div class="container col-3 mt-1">
+    <h1 class="text-center">Nueva categoria</h1>
+    <form class="mt-5" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <div class="d-flex justify-content-evenly mt-2">
+            <a href="{% url 'crud:verCategoria' %}">
+                <button type="button" class="btn btn-secondary">Cancelar</button>
+            </a>
+            <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
-    </div>
+        {% endbuttons %}
+    </form>
+</div>
 {% endblock %}

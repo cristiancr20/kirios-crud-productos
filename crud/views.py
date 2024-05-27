@@ -54,6 +54,7 @@ def crearCategoria(request):
         form = CategoriaForm(request.POST)
         if form.is_valid():
             form.save() 
+            return redirect('crud:verCategoria')
     else:
         form = CategoriaForm()
     
@@ -63,15 +64,18 @@ def editarCategoria(request, id):
     categoria = Categoria.objects.get(id=id)
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
+        estado = request.POST.get('estado')
         categoria.nombre = nombre
+        categoria.estado = estado
         categoria.save()
-        return redirect('index')
+        return redirect('crud:verCategoria')
     return render(request, 'editarCategoria.html', {'categoria': categoria})
 
 def eliminarCategoria(request, id):
     categoria = Categoria.objects.get(id=id)
     categoria.delete()
-    return redirect('index')
+    return redirect('crud:verCategoria')
+    
 
 def verCategoria(request):
     categorias = Categoria.objects.all()
