@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 
 from .models import Producto, Categoria, Marca
 from .forms import ProductoForm, CategoriaForm, MarcaForm
@@ -17,7 +17,8 @@ def crear(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
         if form.is_valid():
-            form.save() # Redirigir a la vista de lista de productos
+            form.save() 
+            return redirect('crud:crearProducto')
     else:
         form = ProductoForm()
     
@@ -35,16 +36,19 @@ def editar(request, id):
         producto.precioCompra = precioCompra
         producto.estado = estado
         producto.save()
-        return redirect('index')
-    return render(request, 'editar.html', {'producto': producto})
+        return redirect('crud:verProducto')
+    return render(request, 'editarProducto.html', {'producto': producto})
 
 def eliminar(request, id):
-    producto = Producto.objects.get(id=id)
-    producto.delete()
-    return redirect('index')
+    producto = get_object_or_404(Producto, id=id)
+    
+    if request.method == 'POST':
+        producto.delete()
+        return redirect('crud:verProducto')
+    return render(request, 'confirmacionEliminar.html', {'producto': producto})
 
 def ver(request):
-    productos = Producto.objects.all()
+    productos = Producto.objects.all().order_by('id')
     return render(request, 'verProducto.html', {'productos': productos})
 
 

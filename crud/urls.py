@@ -7,10 +7,10 @@ urlpatterns = [
     path('', views.index, name='index'),
     
     #PRODUCTOS
-    path('producto/crear/', views.crear, name='crear'),
-    path('producto/editar/<int:id>/', views.editar, name='editar'),
-    path('producto/eliminar/<int:id>/', views.eliminar, name='eliminar'),
-    path('producto/ver/', views.ver, name='ver'),
+    path('producto/crear/', views.crear, name='crearProducto'),
+    path('producto/editar/<int:id>/', views.editar, name='editarProducto'),
+    path('producto/eliminar/<int:id>/', views.eliminar, name='eliminarProducto'),
+    path('producto/ver/', views.ver, name='verProducto'),
 
     #CATEGORIAS
     path('categoria/crear/', views.crearCategoria, name='crearCategoria'),

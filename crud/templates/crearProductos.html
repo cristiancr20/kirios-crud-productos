@@ -1,4 +1,5 @@
 {% extends 'index.html' %}
+{% load bootstrap5 %}
 
 {% block titulo %}
     Productos
@@ -8,36 +9,22 @@
     <br>
     <div class="container">
         <div class="row justify-content-center">
+            <div class="boton-crear-producto">
+                <a href="{% url 'crud:verProducto' %}">
+                    <button class="btn border-0 rounded btn-primary  p-3 float-end">
+                        Listar Productos
+                    </button>
+                </a>
+            </div>
             <div class="col-md-6">
                 <h1 class="text-center">Crear Producto</h1>
                 <br>
-                <form method="POST" class="needs-validation bg-secondary p-5 rounded" novalidate>
+                <form method="POST" class="needs-validation bg-dark p-5 rounded" novalidate>
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_nombre" class="form-label">Nombre</label>
-                        {{ form.nombre }}
-                      
-                        <div class="invalid-feedback">
-                            El nombre es obligatorio.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_precioVenta" class="form-label">Precio de Venta</label>
-                        {{ form.precioVenta }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_precioCompra" class="form-label">Precio de Compra</label>
-                        {{ form.precioCompra}}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_marca" class="form-label">Marca</label>
-                        {{ form.marca}}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_categoria" class="form-label">Categoría</label>
-                        {{ form.categoria}}
-                    </div>
+                    {% bootstrap_form form %}
+                    {% buttons %}
                     <button type="submit" class="btn btn-primary">Enviar</button>
+                    {% endbuttons %}
                 </form>
             </div>
             
