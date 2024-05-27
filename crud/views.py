@@ -6,7 +6,7 @@ from .forms import ProductoForm, CategoriaForm, MarcaForm
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html',{})
 
 #PRODUCTOS
 

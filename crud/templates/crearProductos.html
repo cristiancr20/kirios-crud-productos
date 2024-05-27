@@ -1,21 +1,46 @@
-<!-- templates/crear.html -->
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'index.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Crear Producto</title>
-</head>
+{% block titulo %}
+    Productos
+{% endblock %}
 
-<body>
-    <h1>Crear Producto</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-      
-
-        <button type="submit">Enviar</button>
-    </form>
-</body>
-
-</html>
+{% block contenido %}
+    <br>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center">Crear Producto</h1>
+                <br>
+                <form method="POST" class="needs-validation bg-secondary p-5 rounded" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_nombre" class="form-label">Nombre</label>
+                        {{ form.nombre }}
+                      
+                        <div class="invalid-feedback">
+                            El nombre es obligatorio.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_precioVenta" class="form-label">Precio de Venta</label>
+                        {{ form.precioVenta }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_precioCompra" class="form-label">Precio de Compra</label>
+                        {{ form.precioCompra}}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_marca" class="form-label">Marca</label>
+                        {{ form.marca}}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_categoria" class="form-label">Categoría</label>
+                        {{ form.categoria}}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
