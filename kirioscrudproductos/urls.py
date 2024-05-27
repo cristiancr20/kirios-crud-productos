@@ -20,5 +20,5 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('kirios/productos/', include('crud.urls'))
+    path('api/', include('crud.urls'))
 ]

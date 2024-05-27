@@ -1,0 +1,21 @@
+<!-- templates/crear.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Producto</title>
+</head>
+
+<body>
+    <h1>Crear Producto</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+      
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+
+</html>
