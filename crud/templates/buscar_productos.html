@@ -1,104 +1,83 @@
 {% extends 'index.html' %}
+{% load productos_extras %}
 
-{% block titulo %}
-Comprar Productos
-{% endblock %}
+{% block title %}Buscar Productos{% endblock %}
 
 {% block contenido %}
 <br>
 <div class="container">
     <div class="row justify-content-center">
+        <h1>Buscar Productos</h1>
+        <form method="GET" action="{% url 'crud:buscar_productos' %}">
+            <input type="text" name="q" value="{{ query }}" placeholder="Buscar...">
+            <button type="submit">Buscar</button>
+        </form>
 
-        <div class="container mt-5">
-            <h1 class="mb-4">Buscar Productos</h1>
-            <div class="input-group mb-4">
-                <input type="text" class="form-control" placeholder="Buscar productos..." name="q" value="{{ query }}"
-                    id="busqueda-input">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" id="buscar-productos">Buscar</button>
-                </div>
-            </div>
+        {% if query %}
+        <ul>
+            {% for producto in productos %}
+            <li>{{ producto.nombre }} - ${{ producto.precio }}
+                <form method="post" action="{% url 'crud:agregar_producto' producto.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Agregar a la factura</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-            <div class="row" id="resultados-productos">
-                {% for producto in productos %}
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ producto.nombre }}</h5>
-                            <p class="card-text">Precio: ${{ producto.precioVenta }}</p>
-                            <button class="btn btn-success agregar-producto" data-id="{{ producto.id }}"
-                                data-nombre="{{ producto.nombre }}"
-                                data-precio="{{ producto.precioVenta }}">Agregar</button>
-                        </div>
-                    </div>
-                </div>
+        {% if productos_factura %}
+        <h2>Factura</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto, subtotal in productos_factura_subtotal.items %}
+                <tr>
+                    <td>{{ producto.nombre }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'crud:actualizar_cantidad' producto.id %}">
+                            {% csrf_token %}
+                            <button type="submit" name="action" value="decrementar">-</button>
+                            <input type="hidden" name="cantidad" value="{{ factura|get_item:producto.id }}">
+                            {{ factura|get_item:producto.id }}
+                            <button type="submit" name="action" value="incrementar">+</button>
+                        </form>
+                    </td>
+                    
+                    <td>${{ producto.precioVenta }}</td>
+                    <td>${{ subtotal }}</td>
+                </tr>
                 {% endfor %}
-            </div>
+                <tr>
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td><strong>${{ total_factura }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
 
-            <h2>Productos Seleccionados</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Valor Total</th>
-                    </tr>
-                </thead>
-                <tbody id="productos-seleccionados">
-                    <!-- Aquí se agregarán los productos seleccionados -->
-                </tbody>
-            </table>
-        </div>
+        <!-- Formulario para guardar la factura -->
+        <h2>Guardar Factura</h2>
+        <form method="post" action="{% url 'crud:guardar_factura' %}">
+            {% csrf_token %}
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required><br>
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required><br>
+            <label for="total">Total</label>
+            <input type="text" name="total" id="total" required value="{{ total_factura }}" readonly><br>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-        <script>
-            $(document).ready(function () {
-                $('#buscar-productos').click(function (event) {
-                    event.preventDefault(); // Evita que el formulario se envíe
-                    var query = $('#busqueda-input').val().trim();
-                    if (query !== '') {
-                        $.ajax({
-                            url: '{% url "crud:buscarProductos" %}',
-                            data: { 'q': query },
-                            success: function (data) {
-                                console.log('Respuesta del servidor:', data);
-                                if (data.productos && data.productos.length > 0) {
-                                    var resultados = '';
-                                    data.productos.forEach(function (producto) {
-                                        resultados += '<div class="col-md-4">';
-                                        resultados += '<div class="card mb-4">';
-                                        resultados += '<div class="card-body">';
-                                        resultados += '<h5 class="card-title">' + producto.nombre + '</h5>';
-                                        resultados += '<p class="card-text">Precio: $' + producto.precio + '</p>';
-                                        resultados += '<button class="btn btn-success agregar-producto" data-id="' + producto.id + '" data-nombre="' + producto.nombre + '" data-precio="' + producto.precio + '">Agregar</button>';
-                                        resultados += '</div></div></div>';
-                                    });
-                                    $('#resultados-productos').html(resultados).show();
-                                } else {
-                                    console.error('La respuesta del servidor no incluye productos o está vacía');
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error en la solicitud AJAX:', error);
-                            }
-                        });
-                    } else {
-                        $('#resultados-productos').html('').hide();
-                    }
-                });
-
-                // Agregar producto seleccionado a la lista
-                $(document).on('click', '.agregar-producto', function () {
-                    var nombre = $(this).data('nombre');
-                    var precio = $(this).data('precio');
-                    $('#productos-seleccionados').append('<tr><td>' + nombre + '</td><td>' + precio + '</td></tr>');
-                });
-            });
+            <button type="submit">Guardar Factura</button>
+        </form>
 
 
-        </script>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import buscar_productos, agregar_producto, actualizar_cantidad, guardar_factura
 
 app_name = 'crud'
 
@@ -27,11 +28,12 @@ urlpatterns = [
     #FACTURAS
 
     #BUSCAR
-    path('buscar/', views.buscar_productos, name='buscarProductos'),
-    path('detalle/<int:id>/', views.detalle_producto, name='detalle_producto'),
-    path('agregar_carrito/<int:id>/', views.agregar_carrito, name='agregar_carrito'),
-    path('factura/crear/', views.crearFactura, name='crearFactura'),
-    path('comprar/', views.crearFactura, name='comprar'),
+    path('buscar/', buscar_productos, name='buscar_productos'),
+    path('agregar/<int:producto_id>/', agregar_producto, name='agregar_producto'),
+    path('actualizar/<int:producto_id>/', actualizar_cantidad, name='actualizar_cantidad'),
+    path('guardar/', guardar_factura, name='guardar_factura'),
+    path('ver_facturas/', views.ver_facturas, name='ver_facturas'),
+    path('ver_detalle_factura/<int:factura_id>/', views.ver_detalle_factura, name='ver_detalle_factura'),
+    path('eliminar_factura/<int:factura_id>/', views.eliminar_factura, name='eliminar_factura'),
 
-   
 ]
