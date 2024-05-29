@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+Editar Marca
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="text-center">Editar Marca|</h1>
+    <form method="POST" action="{% url 'crud:editarMarca' marca.id %}">
+        {% csrf_token %}
+        <!-- Aquí incluirías los campos de tu formulario de marca -->
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ marca.nombre }}">
+        </div>
+
+        <div class="form-group">
+            <label for="estado">Estado</label>
+             <select class="form-select" aria-label="Default select example" name="estado" value="{{ marca.estado }}">
+                <option value="True">Activo</option>
+                <option value="False">Inactivo</option>
+            </select>
+            
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+{% endblock %}

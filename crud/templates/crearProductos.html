@@ -19,9 +19,9 @@
             <div class="col-md-6">
                 <h1 class="text-center">Crear Producto</h1>
                 <br>
-                <form method="POST" class="needs-validation bg-dark p-5 rounded" novalidate>
+                <form method="POST" class="needs-validation  p-5 rounded" novalidate>
                     {% csrf_token %}
-                    {% bootstrap_form form %}
+                    {% bootstrap_form form layout='vertical' %}
                     {% buttons %}
                     <button type="submit" class="btn btn-primary">Enviar</button>
                     {% endbuttons %}

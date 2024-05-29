@@ -30,6 +30,7 @@ Productos
                         <th scope="col">Precio Compra</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Categoria</th>
+                        <th scope="col">Stock</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                         <th scope="col"></th>
@@ -44,6 +45,8 @@ Productos
                         <td>{{ producto.precioCompra }}</td>
                         <td>{{ producto.marca.nombre }}</td>
                         <td>{{ producto.categoria.nombre }}</td>
+
+                        <td>{{ producto.stock }}</td>
                         <td>{{ producto.estado }}</td>
                         <td class="actions text-center">
                             <a href="{% url 'crud:editarProducto' producto.id %}"">

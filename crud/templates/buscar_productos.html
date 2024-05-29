@@ -1,0 +1,104 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+Comprar Productos
+{% endblock %}
+
+{% block contenido %}
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+
+        <div class="container mt-5">
+            <h1 class="mb-4">Buscar Productos</h1>
+            <div class="input-group mb-4">
+                <input type="text" class="form-control" placeholder="Buscar productos..." name="q" value="{{ query }}"
+                    id="busqueda-input">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="buscar-productos">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row" id="resultados-productos">
+                {% for producto in productos %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="card-text">Precio: ${{ producto.precioVenta }}</p>
+                            <button class="btn btn-success agregar-producto" data-id="{{ producto.id }}"
+                                data-nombre="{{ producto.nombre }}"
+                                data-precio="{{ producto.precioVenta }}">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h2>Productos Seleccionados</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-seleccionados">
+                    <!-- Aquí se agregarán los productos seleccionados -->
+                </tbody>
+            </table>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#buscar-productos').click(function (event) {
+                    event.preventDefault(); // Evita que el formulario se envíe
+                    var query = $('#busqueda-input').val().trim();
+                    if (query !== '') {
+                        $.ajax({
+                            url: '{% url "crud:buscarProductos" %}',
+                            data: { 'q': query },
+                            success: function (data) {
+                                console.log('Respuesta del servidor:', data);
+                                if (data.productos && data.productos.length > 0) {
+                                    var resultados = '';
+                                    data.productos.forEach(function (producto) {
+                                        resultados += '<div class="col-md-4">';
+                                        resultados += '<div class="card mb-4">';
+                                        resultados += '<div class="card-body">';
+                                        resultados += '<h5 class="card-title">' + producto.nombre + '</h5>';
+                                        resultados += '<p class="card-text">Precio: $' + producto.precio + '</p>';
+                                        resultados += '<button class="btn btn-success agregar-producto" data-id="' + producto.id + '" data-nombre="' + producto.nombre + '" data-precio="' + producto.precio + '">Agregar</button>';
+                                        resultados += '</div></div></div>';
+                                    });
+                                    $('#resultados-productos').html(resultados).show();
+                                } else {
+                                    console.error('La respuesta del servidor no incluye productos o está vacía');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error en la solicitud AJAX:', error);
+                            }
+                        });
+                    } else {
+                        $('#resultados-productos').html('').hide();
+                    }
+                });
+
+                // Agregar producto seleccionado a la lista
+                $(document).on('click', '.agregar-producto', function () {
+                    var nombre = $(this).data('nombre');
+                    var precio = $(this).data('precio');
+                    $('#productos-seleccionados').append('<tr><td>' + nombre + '</td><td>' + precio + '</td></tr>');
+                });
+            });
+
+
+        </script>
+    </div>
+</div>
+{% endblock %}

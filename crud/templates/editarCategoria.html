@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+Editar Categoria
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="text-center">Editar Marca|</h1>
+    <form method="POST" action="{% url 'crud:editarCategoria' categoria.id %}">
+        {% csrf_token %}
+        <!-- Aquí incluirías los campos de tu formulario de marca -->
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ categoria.nombre }}">
+        </div>
+
+        
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+{% endblock %}

@@ -23,6 +23,15 @@ urlpatterns = [
     path('marca/editar/<int:id>/', views.editarMarca, name='editarMarca'),
     path('marca/eliminar/<int:id>/', views.eliminarMarca, name='eliminarMarca'),
     path('marca/ver/', views.verMarca, name='verMarca'),
-    
+
+    #FACTURAS
+
+    #BUSCAR
+    path('buscar/', views.buscar_productos, name='buscarProductos'),
+    path('detalle/<int:id>/', views.detalle_producto, name='detalle_producto'),
+    path('agregar_carrito/<int:id>/', views.agregar_carrito, name='agregar_carrito'),
+    path('factura/crear/', views.crearFactura, name='crearFactura'),
+    path('comprar/', views.crearFactura, name='comprar'),
+
    
 ]
