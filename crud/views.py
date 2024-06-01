@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Producto, Categoria, Marca, DetalleFactura, Factura
+from .models import Factura, DetalleFactura, Producto
 from .forms import ProductoForm, CategoriaForm, MarcaForm
 from django.contrib import messages
 
@@ -221,9 +222,7 @@ def actualizar_cantidad(request, producto_id):
 
     return redirect('crud:buscar_productos')
 
-from django.contrib import messages
-from django.shortcuts import redirect
-from .models import Factura, DetalleFactura, Producto
+
 
 def guardar_factura(request):
     if request.method == 'POST':

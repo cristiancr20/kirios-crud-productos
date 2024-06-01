@@ -16,7 +16,7 @@
         {% if query %}
         <ul>
             {% for producto in productos %}
-            <li>{{ producto.nombre }} - ${{ producto.precio }}
+            <li>{{ producto.nombre }} - ${{ producto.precioVenta }}
                 <form method="post" action="{% url 'crud:agregar_producto' producto.id %}">
                     {% csrf_token %}
                     <button type="submit">Agregar a la factura</button>
