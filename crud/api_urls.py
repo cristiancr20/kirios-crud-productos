@@ -16,6 +16,7 @@ urlpatterns = [
     path('productos/buscar/', BuscarProductos.as_view(), name='buscar_productos'),
     path('facturas/guardar/', GuardarFactura.as_view(), name='guardar_factura'),
 
+
 ]
 
 urlpatterns += router.urls

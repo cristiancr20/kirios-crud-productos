@@ -13,23 +13,32 @@ class MarcaSerializer(serializers.ModelSerializer):
         fields = ['id', 'nombre']
 
 class ProductoSerializer(serializers.ModelSerializer):
-    categoria = CategoriaSerializer()
     marca = MarcaSerializer()
+    categoria = CategoriaSerializer()
 
     class Meta:
         model = Producto
         fields = ['id', 'nombre', 'precioVenta', 'precioCompra', 'marca', 'categoria', 'stock', 'estado']
 
+    def create(self, validated_data):
+        marca_data = validated_data.pop('marca')
+        categoria_data = validated_data.pop('categoria')
+        marca = Marca.objects.get_or_create(**marca_data)[0]
+        categoria = Categoria.objects.get_or_create(**categoria_data)[0]
+        producto = Producto.objects.create(marca=marca, categoria=categoria, **validated_data)
+        return producto
 class DetalleFacturaSerializer(serializers.ModelSerializer):
     producto = ProductoSerializer()
     
     class Meta:
         model = DetalleFactura
-        fields = '__all__'
+        fields = ['id', 'factura', 'producto', 'cantidad', 'precio', 'subtotal']
 
 class FacturaSerializer(serializers.ModelSerializer):
     detalles = DetalleFacturaSerializer(many=True, read_only=True)
     
     class Meta:
         model = Factura
-        fields = '__all__'
+        fields = ['id', 'fecha', 'total', 'cliente', 'productos', 'detalles']
+
+    

@@ -1,5 +1,5 @@
 # mi_aplicacion/api_views.py
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from .models import Producto, Categoria, Marca, Factura, DetalleFactura
 from .serializers import ProductoSerializer, CategoriaSerializer, MarcaSerializer, FacturaSerializer, DetalleFacturaSerializer
@@ -27,6 +27,7 @@ class DetalleFacturaViewSet(viewsets.ModelViewSet):
     serializer_class = DetalleFacturaSerializer
 
 
+
 class BuscarProductos(APIView):
     def get(self, request):
         termino = request.query_params.get('termino', None)
@@ -41,8 +42,8 @@ class GuardarFactura(APIView):
     def post(self, request):
         serializer = FacturaSerializer(data=request.data)
         if serializer.is_valid():
-            factura = serializer.save()
-            # Realiza cualquier lógica adicional aquí, como reducir el stock de productos, etc.
-            print(factura)
+            serializer.save()
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
